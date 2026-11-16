@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misi Pecahan — Pengembara Cilik</title>
+<style>
+:root{--ink:#26334a;--pink:#ff83ad;--purple:#8874dc;--blue:#78c9ed;--yellow:#ffd76b;--mint:#9fe1c1;--paper:#fffdf8;--soft:#f4efff}
+*{box-sizing:border-box}body{margin:0;font-family:Nunito,"Trebuchet MS",Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#fff0f6,#eef8ff 55%,#f3efff);min-height:100vh}
+button{font:inherit;cursor:pointer;border:0;border-radius:15px;padding:12px 18px;font-weight:800;transition:.15s}button:hover{transform:translateY(-2px);filter:brightness(1.03)}button:focus-visible{outline:3px solid #293b66;outline-offset:3px}
+.wrap{max-width:1050px;margin:auto;padding:22px}.hero{background:linear-gradient(115deg,#ffb5cf,#b8b0ff 60%,#9fe0ed);border:4px solid white;border-radius:28px;padding:24px;box-shadow:0 12px 30px #6976a522;position:relative;overflow:hidden}
+.hero:after{content:"✦  ★  ✧";position:absolute;right:20px;top:18px;font-size:28px;color:#fff9;letter-spacing:10px}
+h1{font-size:clamp(2rem,5vw,3.4rem);margin:0 0 8px;color:#fff;text-shadow:2px 3px 0 #7866ba} .hero p{font-size:1.05rem;max-width:680px;line-height:1.5;margin:0;color:#35415d}
+.pills{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.pill{background:#ffffffc9;border:1px solid #fff;padding:7px 12px;border-radius:99px;font-size:.88rem;font-weight:800}
+.layout{display:grid;grid-template-columns:270px 1fr;gap:18px;margin-top:18px}.panel,.game{background:var(--paper);border:2px solid white;border-radius:24px;padding:20px;box-shadow:0 8px 24px #64708b18}
+.panel h2,.game h2{margin:0 0 12px}.mascot{font-size:66px;text-align:center;line-height:1.2}.panel p{line-height:1.5}.note{background:#fff4c9;border-radius:16px;padding:13px;margin:12px 0;font-size:.94rem;line-height:1.45}.note strong{color:#785a14}.primary{background:var(--purple);color:white}.secondary{background:#e9e3ff;color:#51448e}.pink{background:var(--pink);color:#682b49}.muted{color:#66718a;font-size:.9rem}.stats{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.stat{flex:1;min-width:90px;background:#f2f0ff;border-radius:14px;padding:10px;text-align:center}.stat b{display:block;font-size:1.35rem}.progress{height:12px;background:#e9e8f2;border-radius:99px;overflow:hidden;margin:9px 0 17px}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--purple));transition:width .3s}
+.question-top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.tag{background:#e9f7ff;color:#24627d;padding:7px 11px;border-radius:99px;font-size:.85rem;font-weight:800}
+.question{font-size:1.3rem;line-height:1.5;margin:18px 0}.visual{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;min-height:75px;margin:14px 0}.fraction{display:flex;gap:4px;align-items:center;justify-content:center;flex-wrap:wrap}.piece{width:34px;height:34px;border:2px solid #6e66a8;border-radius:7px;background:#fff}.piece.filled{background:#ff91b6}.piece.blue{background:#7bc9eb}.piece.green{background:#8edbb6}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.option{background:#f4f2ff;color:#3b3c61;border:2px solid #e2dcff;text-align:left;min-height:54px}.option.selected{background:#e5e0ff;border-color:var(--purple)}.option.correct{background:#dcf8e9;border-color:#42ad76}.option.wrong{background:#ffe3e9;border-color:#e77b96}
+.feedback{display:none;padding:13px 15px;border-radius:15px;line-height:1.5;margin:12px 0}.feedback.show{display:block}.feedback.good{background:#e2f8ec;border:1px solid #9adab4}.feedback.bad{background:#fff0d9;border:1px solid #f0c77c}
+.actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:16px}.hidden{display:none!important}
+.result{text-align:center;padding:12px}.bigscore{font-size:3rem;color:#806ed1;font-weight:900}.medal{font-size:70px}.review{text-align:left;margin-top:18px;background:#f7f5ff;border-radius:16px;padding:14px;max-height:300px;overflow:auto}.review p{border-bottom:1px solid #e5e0f3;padding:8px 0;margin:0;line-height:1.45}
+.footer{text-align:center;color:#77809a;font-size:.82rem;padding:18px}
+
+.lesson-card{font-size:.96rem;min-height:48px}
+.lesson-card.active{outline:3px solid #8874dc;outline-offset:1px}
+.lesson-visual{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin:10px 0}
+.lesson-piece{width:27px;height:27px;border:2px solid #8075b8;border-radius:6px;background:white}
+.lesson-piece.on{background:#ff91b6}
+.lesson-number{display:inline-block;background:#fff;border-radius:12px;padding:4px 11px;font-size:1.5rem;font-weight:900;color:#765dbd}
+.quick-option{padding:9px}
+
+@media(max-width:760px){.layout{grid-template-columns:1fr}.panel{order:2}.options{grid-template-columns:1fr}.wrap{padding:12px}.hero{padding:20px}.question{font-size:1.12rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <h1>🌈 Misi Pecahan</h1>
+  <p><b>Pengembara Cilik:</b> Jelajah pulau ajaib, bantu penduduk menyelesaikan cabaran pecahan dan kumpulkan bintang ilmu!</p>
+  <div class="pills"><span class="pill">📚 Matematik Tahun 2</span><span class="pill">🧩 20 cabaran</span><span class="pill">🏝️ Dunia kartun & pengembaraan</span></div>
+</header>
+<div class="layout">
+<aside class="panel">
+  <div class="mascot" aria-hidden="true">🦊</div>
+  <h2>🎒 Akademi Pecahan Mini</h2>
+  <p class="muted">Belajar satu perkara pada satu masa. Tekan kad untuk meneroka!</p>
+  <div class="note" style="background:#f4efff">
+    <strong>💡 Ingat!</strong><br>Bahagian mesti sama besar untuk membentuk pecahan.
+  </div>
+  <div id="lessonCards" style="display:grid;gap:10px">
+    <button class="lesson-card" data-lesson="0" style="background:#fff0f6;color:#6b3450;text-align:left;border:2px solid #ffd2e2">🍕 1. Apa itu pecahan?</button>
+    <button class="lesson-card" data-lesson="1" style="background:#eef8ff;color:#285b78;text-align:left;border:2px solid #ccecff">🔢 2. Pengangka</button>
+    <button class="lesson-card" data-lesson="2" style="background:#f2efff;color:#51448e;text-align:left;border:2px solid #ddd5ff">🧮 3. Penyebut</button>
+    <button class="lesson-card" data-lesson="3" style="background:#effbf4;color:#286345;text-align:left;border:2px solid #c9efd9">🧠 4. Cara jawab</button>
+  </div>
+  <div id="lessonDetail" class="note" style="background:#fff8df;margin-top:12px">
+    <div style="font-size:2rem;text-align:center">🍕</div>
+    <b>Jom kenali pecahan!</b><br>Sesuatu benda dibahagikan kepada bahagian yang sama besar. Setiap bahagian ialah sebahagian daripada keseluruhan.
+    <div style="text-align:center;font-size:1.5rem;margin:8px">🍕 = 1/4?</div>
+    <small class="muted">Pilih kad di atas untuk belajar.</small>
+  </div>
+  <button class="secondary" id="quickCheckBtn" style="width:100%">🎯 Cuba kuiz mini</button>
+  <div id="quickCheck" class="note hidden" style="background:#eaf7ff">
+    <b>Jika 1 daripada 4 bahagian dipilih, pecahannya ialah...</b>
+    <div style="display:grid;gap:6px;margin-top:9px">
+      <button class="quick-option secondary" data-answer="0">1/4</button>
+      <button class="quick-option secondary" data-answer="1">4/1</button>
+    </div>
+    <p id="quickFeedback" aria-live="polite"></p>
+  </div>
+  <p class="muted">📖 Nota mini ini boleh dibuka semula pada bila-bila masa semasa bermain.</p>
+</aside>
+<main class="game">
+  <div id="intro">
+    <h2>Selamat datang, Pengembara!</h2>
+    <p>Empat kawasan ajaib memerlukan bantuan kamu. Selesaikan 20 cabaran untuk membuka peti harta karun ilmu.</p>
+    <div class="visual" style="font-size:48px">🏝️ 🏰 🌳 🍰 ⭐</div>
+    <div class="note"><strong>Bagaimana bermain?</strong><br>Tekan “Mula pengembaraan”, baca soalan, pilih jawapan dan tekan “Semak jawapan”. Setiap jawapan betul mendapat 5 markah. Jumlah markah penuh ialah 100.</div>
+    <button class="primary" id="startBtn2">Mulakan sekarang</button>
+  </div>
+  <div id="quiz" class="hidden">
+    <div class="question-top"><span class="tag" id="area">Pulau Pecahan</span><b id="counter">Soalan 1 / 20</b></div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="stats"><div class="stat"><span class="muted">Markah</span><b id="score">0</b></div><div class="stat"><span class="muted">Bintang</span><b id="stars">⭐ 0</b></div><div class="stat"><span class="muted">Dijawab</span><b id="answered">0/20</b></div></div>
+    <div class="question" id="question"></div>
+    <div class="visual" id="visual"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+    <div class="actions"><button class="secondary" id="noteBtn">📖 Lihat nota</button><button class="primary" id="checkBtn" disabled>Semak jawapan</button><button class="pink hidden" id="nextBtn">Soalan seterusnya ➜</button></div>
+  </div>
+  <div id="result" class="hidden result">
+    <div class="medal" id="medal">🏆</div><h2>Pengembaraan selesai!</h2>
+    <p>Kamu telah menyelesaikan semua 20 cabaran pecahan.</p>
+    <div class="bigscore" id="finalScore">0 / 100</div>
+    <h2 id="grade">Gred: -</h2>
+    <p id="message"></p>
+    <div class="stats"><div class="stat"><span class="muted">Jawapan betul</span><b id="correctCount">0</b></div><div class="stat"><span class="muted">Peratus</span><b id="percent">0%</b></div><div class="stat"><span class="muted">Bintang</span><b id="finalStars">0 ⭐</b></div></div>
+    <div class="review" id="review"><h3>Semakan jawapan</h3></div>
+    <button class="primary" onclick="location.reload()">🔄 Main semula</button>
+  </div>
+</main>
+</div>
+<div class="footer">Permainan pembelajaran Matematik Tahun 2 • Misi Pecahan • Bahan latihan digital</div>
+</div>
+<script>
+const questions=[
+{area:"Pulau Pecahan",q:"Satu piza dibahagikan kepada 4 bahagian sama besar. Amir makan 1 bahagian. Apakah pecahan piza yang dimakan Amir?",v:"pie",opts:["1/4","3/4","1/3","4/1"],a:0,why:"Piza mempunyai 4 bahagian sama besar. Amir makan 1 bahagian, jadi pecahannya ialah 1/4."},
+{area:"Pulau Pecahan",q:"Apakah nama bagi nombor di atas garis pecahan?",opts:["Penyebut","Pengangka","Jumlah","Hasil bahagi"],a:1,why:"Pengangka berada di atas garis pecahan dan menunjukkan bilangan bahagian yang dipilih."},
+{area:"Pulau Pecahan",q:"Dalam pecahan 3/5, nombor 5 menunjukkan apa?",opts:["Bahagian yang diwarnakan","Bilangan objek yang hilang","Jumlah bahagian sama besar","Bilangan yang dipilih"],a:2,why:"Penyebut ialah nombor di bawah garis pecahan. Nilai 5 menunjukkan jumlah bahagian sama besar."},
+{area:"Pulau Pecahan",q:"Rajah menunjukkan 2 daripada 6 bahagian diwarnakan. Apakah pecahannya?",v:"bars6",opts:["2/6","6/2","4/6","2/4"],a:0,why:"Dua bahagian diwarnakan daripada jumlah enam bahagian. Pecahannya ialah 2/6."},
+{area:"Hutan Ajaib",q:"Lina membahagikan sebiji kek kepada 8 bahagian sama besar. Dia memberikan 3 bahagian kepada rakannya. Berapakah pecahan kek yang diberikan?",v:"cake8",opts:["3/8","5/8","8/3","3/5"],a:0,why:"Tiga bahagian diberikan daripada lapan bahagian semuanya. Jadi, pecahannya ialah 3/8."},
+{area:"Hutan Ajaib",q:"Pilih pecahan yang mempunyai pengangka 1 dan penyebut 7.",opts:["7/1","1/7","1/1","7/7"],a:1,why:"Pengangka ialah 1 dan penyebut ialah 7. Pecahan yang betul ialah 1/7."},
+{area:"Hutan Ajaib",q:"Sebuah jalur dibahagikan kepada 5 bahagian sama besar. Empat bahagian diwarnakan. Apakah pecahannya?",v:"bars5",opts:["1/5","4/5","5/4","4/4"],a:1,why:"Empat bahagian diwarnakan daripada lima bahagian semuanya, iaitu 4/5."},
+{area:"Hutan Ajaib",q:"Ibu memotong tembikai kepada 6 bahagian sama besar. Dua bahagian dimakan. Berapa bahagian yang belum dimakan?",opts:["2 bahagian","3 bahagian","4 bahagian","6 bahagian"],a:2,why:"6 − 2 = 4. Empat bahagian masih belum dimakan."},
+{area:"Istana Kek",q:"Antara pecahan berikut, yang manakah lebih besar: 1/4 atau 1/2?",opts:["1/4","1/2","Kedua-duanya sama","Tidak boleh ditentukan"],a:1,why:"Jika satu benda dibahagikan kepada 2 bahagian sama besar, satu bahagiannya lebih besar berbanding satu daripada 4 bahagian."},
+{area:"Istana Kek",q:"Bandingkan 3/6 dengan 1/6. Pecahan yang manakah lebih besar?",opts:["1/6","3/6","Kedua-duanya sama","Tiada jawapan"],a:1,why:"Penyebut sama. Bandingkan pengangka: 3 lebih besar daripada 1, maka 3/6 lebih besar."},
+{area:"Istana Kek",q:"Siti mewarnakan 2 daripada 4 petak. Manakala Ali mewarnakan 3 daripada 4 petak. Siapakah mewarnakan bahagian yang lebih banyak?",v:"compare",opts:["Siti","Ali","Sama banyak","Kedua-duanya tidak mewarna"],a:1,why:"2/4 berbanding 3/4. Oleh sebab penyebut sama dan 3 lebih besar daripada 2, Ali mewarnakan lebih banyak."},
+{area:"Istana Kek",q:"Pilih tanda yang betul: 2/5 ___ 4/5",opts:["<"," >", "=","+"],a:0,why:"Penyebut kedua-dua pecahan ialah 5. Oleh sebab 2 lebih kecil daripada 4, maka 2/5 < 4/5."},
+{area:"Istana Kek",q:"Manakah pecahan yang menunjukkan satu daripada tiga bahagian sama besar?",v:"thirds",opts:["1/2","1/3","3/1","2/3"],a:1,why:"Satu daripada tiga bahagian sama besar ditulis sebagai 1/3."},
+{area:"Kampung Bintang",q:"Ada 10 biji belon. 6 daripadanya berwarna biru. Apakah pecahan belon yang berwarna biru?",opts:["6/10","4/10","10/6","6/6"],a:0,why:"Enam belon biru daripada jumlah sepuluh belon. Pecahannya ialah 6/10."},
+{area:"Kampung Bintang",q:"Ravi mempunyai 8 keping biskut. Dia makan 3 keping. Apakah pecahan biskut yang masih ada?",opts:["3/8","5/8","8/5","3/5"],a:1,why:"Baki biskut ialah 8 − 3 = 5 keping. Daripada 8 keping asal, pecahan yang tinggal ialah 5/8."},
+{area:"Kampung Bintang",q:"Sebuah taman mempunyai 9 petak bunga. 1 petak ditanam bunga ros. Apakah pecahan petak yang ditanam bunga ros?",opts:["9/1","1/8","1/9","8/9"],a:2,why:"Satu daripada sembilan petak ditanam bunga ros. Pecahannya ialah 1/9."},
+{area:"Kampung Bintang",q:"Maya membahagikan 1 kek kepada 4 bahagian sama besar. Dia makan 2 bahagian. Berapa bahagian kek yang tinggal?",opts:["1 bahagian","2 bahagian","3 bahagian","4 bahagian"],a:1,why:"4 − 2 = 2. Jadi, dua bahagian kek masih tinggal."},
+{area:"Cabaran Harta Karun",q:"Dalam satu bakul ada 7 biji epal. 2 biji berwarna hijau dan selebihnya merah. Apakah pecahan epal yang berwarna merah?",opts:["2/7","5/7","7/5","2/5"],a:1,why:"Epal merah = 7 − 2 = 5 biji. Daripada 7 biji epal, pecahannya ialah 5/7."},
+{area:"Cabaran Harta Karun",q:"Satu reben dibahagikan kepada 10 bahagian sama panjang. Nisa menggunakan 7 bahagian. Berapakah pecahan reben yang belum digunakan?",opts:["7/10","3/10","10/7","7/3"],a:1,why:"Bahagian belum digunakan = 10 − 7 = 3. Jadi, pecahannya ialah 3/10."},
+{area:"Cabaran Harta Karun",q:"Danial mempunyai 2/8 daripada sekotak coklat. Kakaknya mempunyai 5/8. Siapakah mempunyai bahagian coklat yang lebih banyak?",opts:["Danial","Kakaknya","Sama banyak","Kedua-duanya tiada"],a:1,why:"Penyebut sama, jadi bandingkan pengangka. 5 lebih besar daripada 2. Kakaknya mempunyai bahagian lebih banyak."}
+];
+let index=0,score=0,answered=0,correct=0,selected=null,locked=false,history=[];
+const $=id=>document.getElementById(id);
+function drawFraction(count,filled,color="filled"){let s='<div class="fraction">';for(let i=0;i<count;i++)s+=`<span class="piece ${i<filled?color:""}"></span>`;return s+'</div>'}
+function visualFor(v){
+ if(v==="pie")return '<div style="font-size:58px">🍕</div>';
+ if(v==="bars6")return drawFraction(6,2);
+ if(v==="cake8")return '<div style="font-size:58px">🍰</div>'+drawFraction(8,3);
+ if(v==="bars5")return drawFraction(5,4,"blue");
+ if(v==="compare")return '<div><b>Siti: 2/4</b>'+drawFraction(4,2)+'</div><div><b>Ali: 3/4</b>'+drawFraction(4,3,"blue")+'</div>';
+ if(v==="thirds")return drawFraction(3,1,"green");
+ return "";
+}
+function start(){ $("intro").classList.add("hidden");$("result").classList.add("hidden");$("quiz").classList.remove("hidden");render()}
+function render(){
+ const q=questions[index];selected=null;locked=false;
+ $("area").textContent=q.area;$("counter").textContent=`Soalan ${index+1} / 20`;
+ $("bar").style.width=(index/20*100)+"%";$("score").textContent=score;$("stars").textContent="⭐ "+Math.floor(score/5);$("answered").textContent=answered+"/20";
+ $("question").textContent=q.q;$("visual").innerHTML=visualFor(q.v);
+ $("options").innerHTML="";q.opts.forEach((o,i)=>{let b=document.createElement("button");b.className="option";b.textContent=String.fromCharCode(65+i)+". "+o;b.onclick=()=>choose(i);$("options").appendChild(b)});
+ $("feedback").className="feedback";$("feedback").textContent="";$("checkBtn").classList.remove("hidden");$("checkBtn").disabled=true;$("nextBtn").classList.add("hidden");
+}
+function choose(i){if(locked)return;selected=i;[...$("options").children].forEach((b,n)=>b.classList.toggle("selected",n===i));$("checkBtn").disabled=false}
+function check(){
+ if(selected===null||locked)return;locked=true;let q=questions[index],ok=selected===q.a;answered++;if(ok){score+=5;correct++}
+ history.push({q:q.q,chosen:q.opts[selected],answer:q.opts[q.a],ok});
+ [...$("options").children].forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add("correct");if(n===selected&&!ok)b.classList.add("wrong")});
+ $("score").textContent=score;$("stars").textContent="⭐ "+Math.floor(score/5);$("answered").textContent=answered+"/20";
+ let f=$("feedback");f.className="feedback show "+(ok?"good":"bad");f.innerHTML=(ok?"<b>Hebat! Jawapan kamu betul. ⭐</b> ":"<b>Belum tepat. Teruskan mencuba! 🌱</b> ")+q.why;
+ $("checkBtn").classList.add("hidden");$("nextBtn").classList.remove("hidden");$("nextBtn").textContent=index===19?"Lihat keputusan 🏆":"Soalan seterusnya ➜";
+ $("bar").style.width=((index+1)/20*100)+"%";
+}
+function next(){if(index<19){index++;render()}else finish()}
+function finish(){
+ $("quiz").classList.add("hidden");$("result").classList.remove("hidden");
+ let pct=score;let grade=pct>=80?"A":pct>=65?"B":pct>=50?"C":pct>=40?"D":"E";
+ let msg=pct>=80?"Hebat! Kamu pengembara pecahan yang cemerlang!":pct>=65?"Bagus! Teruskan berlatih untuk lebih mahir.":pct>=50?"Usaha yang baik. Baca semula nota dan cuba lagi.":"Jangan berputus asa. Ulang kaji nota dan cuba sekali lagi.";
+ $("finalScore").textContent=score+" / 100";$("grade").textContent="Gred: "+grade;$("message").textContent=msg;$("correctCount").textContent=correct+" / 20";$("percent").textContent=pct+"%";$("finalStars").textContent=Math.floor(score/5)+" ⭐";
+ $("medal").textContent=pct>=80?"🏆":pct>=50?"🥈":"🌟";
+ $("review").innerHTML="<h3>Semakan jawapan</h3>"+history.map((h,i)=>`<p><b>${i+1}. ${h.ok?"✅":"❌"} ${h.q}</b><br>Jawapan kamu: ${h.chosen}<br>Jawapan betul: ${h.answer}</p>`).join("");
+}
+if ($("startBtn")) $("startBtn").onclick=start;
+$("startBtn2").onclick=start;
+$("checkBtn").onclick=check;
+$("nextBtn").onclick=next;
+
+const lessons = [
+  {emoji:"🍕",title:"Apa itu pecahan?",body:"Pecahan ialah sebahagian daripada satu benda yang dibahagikan kepada bahagian SAMA BESAR.",visual:'<div class="lesson-visual"><span class="lesson-piece on"></span><span class="lesson-piece"></span><span class="lesson-piece"></span><span class="lesson-piece"></span></div><div style="text-align:center"><span class="lesson-number">1/4</span></div>',tip:"Satu daripada empat bahagian = satu per empat."},
+  {emoji:"🔢",title:"Pengangka = nombor di atas",body:"Pengangka memberitahu kita berapa bahagian yang dipilih atau diwarnakan.",visual:'<div style="text-align:center"><span class="lesson-number" style="color:#e8759e">3</span><div style="font-size:1.4rem">―</div><span class="lesson-number">5</span></div><div class="lesson-visual"><span class="lesson-piece on"></span><span class="lesson-piece on"></span><span class="lesson-piece on"></span><span class="lesson-piece"></span><span class="lesson-piece"></span></div>',tip:"Dalam 3/5, pengangka ialah 3."},
+  {emoji:"🧮",title:"Penyebut = nombor di bawah",body:"Penyebut memberitahu jumlah semua bahagian yang SAMA BESAR.",visual:'<div style="text-align:center"><span class="lesson-number">3</span><div style="font-size:1.4rem">―</div><span class="lesson-number" style="color:#6b86d6">5</span></div><div class="lesson-visual"><span class="lesson-piece on"></span><span class="lesson-piece on"></span><span class="lesson-piece on"></span><span class="lesson-piece"></span><span class="lesson-piece"></span></div>',tip:"Dalam 3/5, penyebut ialah 5."},
+  {emoji:"🧠",title:"Cara mudah jawab soalan",body:"Ikut 3 langkah mudah. Baca cerita, kira jumlah bahagian, kemudian kira bahagian yang dipilih.",visual:'<div style="font-size:1.05rem;line-height:1.9;text-align:center">👀 Baca soalan<br>🔍 Kira semua bahagian<br>✏️ Tulis pecahan</div>',tip:"Contoh: 2 daripada 6 bahagian dipilih = 2/6."}
+];
+function showLesson(i){
+  const l=lessons[i];
+  $("lessonDetail").innerHTML=`<div style="font-size:2.1rem;text-align:center">${l.emoji}</div><b>${l.title}</b><p style="margin:7px 0;line-height:1.45">${l.body}</p>${l.visual}<div style="background:#fff;border-radius:11px;padding:9px;margin-top:8px"><b>⭐ Ingat:</b> ${l.tip}</div>`;
+  document.querySelectorAll(".lesson-card").forEach((b,n)=>b.classList.toggle("active",n===i));
+}
+document.querySelectorAll(".lesson-card").forEach(b=>b.addEventListener("click",()=>showLesson(Number(b.dataset.lesson))));
+$("quickCheckBtn").onclick=()=>{$("quickCheck").classList.toggle("hidden");$("quickFeedback").textContent="";};
+document.querySelectorAll(".quick-option").forEach(b=>b.onclick=()=>{
+  $("quickFeedback").textContent=b.dataset.answer==="0"?"🎉 Betul! 1 bahagian daripada 4 ialah 1/4.":"Cuba lagi! Nombor di atas ialah bahagian dipilih.";
+});
+$("noteBtn").onclick=()=>{document.querySelector(".panel").scrollIntoView({behavior:"smooth",block:"start"});};
+showLesson(0);
+
+</script>
+</body></html>
